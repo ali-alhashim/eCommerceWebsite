@@ -3,44 +3,90 @@
 {%block content%}
 
 <div class="container">
-<div class="row row-cols-1 row-cols-md-2 g-4">
+
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home'%}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'products'%}">products</a></li>
+      <li class="breadcrumb-item active" href="{% url 'products'%}" aria-current="page">Electronics</li>
+    </ol>
+  </nav>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+
+  {%if products%}
+  {% for product in products %}
     <div class="col">
-      <div class="card">
-        <img src="..." class="card-img-top" alt="...">
+      <div class="card ">
+        <img src="{{product.photo.url}}" class="card-img-top" alt="..." style='max-width: 200px; align-self: center; margin: 5px;'>
         <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+          <h5 class="card-title">{{product.name}}</h5>
+          <p class="card-text">{{product.description}}</p>
+          <h5 class="card-title " style="color:red" align="right">{{product.price}} SR</h5>
         </div>
       </div>
     </div>
-    <div class="col">
-      <div class="card">
-        <img src="..." class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card">
-        <img src="..." class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card">
-        <img src="..." class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-        </div>
-      </div>
-    </div>
+
+    {%endfor%}
+
+    {% else %}
+    <p>No Products Available</p>
+    {%endif%}
+
+   
+    
   </div>
+
+  <nav aria-label="..." class="my-5">
+
+    {% if products.has_other_pages %}
+
+    <ul class="pagination">
+
+      {% if products.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{products.previous_page_number}}">Previous</a>
+      </li>
+      {%else%}
+      <li class="page-item disabled">
+       <a class="page-link" href="#">Previous</a>
+      </li>
+      {%endif%}
+     
+
+     
+
+
+      {% for i in products.paginator.page_range %}
+      {% if products.number ==  i %}
+      <li class="page-item active">
+        <a class="page-link" href="#">{{i}}</a>
+      </li>
+      {% else %}
+      <li class="page-item ">
+        <a class="page-link" href="?page={{i}}">{{i}}</a>
+      </li>
+      {%endif%}
+       {%endfor%}
+
+      
+
+
+
+      {%if products.has_next%}
+      <li class="page-item">
+        <a class="page-link" href="?page={{products.next_page_number}}">Next</a>
+      </li>
+      {%else%}
+    <li class="page-item disabled">
+     <a class="page-link" href="#">Next</a>
+    </li>
+      {%endif%}
+    </ul>
+    {%endif%}
+  </nav>
+
+ 
 </div>
 
 {%endblock%}
